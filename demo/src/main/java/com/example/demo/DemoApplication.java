@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 import org.springframework.boot.SpringApplication;
@@ -8,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.ListContainersCmd;
+import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 
@@ -15,7 +17,7 @@ import com.github.dockerjava.core.DockerClientBuilder;
 public class DemoApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		
 		
 //		System.out.println(BigDecimal.TEN.compareTo(BigDecimal.TEN));
 		Properties properties = new Properties();
@@ -24,15 +26,21 @@ public class DemoApplication {
 //		properties.setProperty("registry.username", "kwan");
 //		properties.setProperty("DOCKER_CERT_PATH", "/Users/kwan/.docker/machine/machines/default");
 //		properties.setProperty("DOCKER_MACHINE_NAME", "default");
-//		properties.setProperty("DOCKER_TLS_VERIFY", "1");
+//		properties.setProperty("DOCKER_TLS_VERIFY", "0");
 		properties.setProperty("DOCKER_HOST", "tcp://localhost:2376");
 		DefaultDockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder()
 		    .withProperties(properties).build();
 		DockerClient dockerClient = DockerClientBuilder.getInstance(config).build();
 		ListContainersCmd listContainersCmd = dockerClient.listContainersCmd().withStatusFilter("running");
-		listContainersCmd.getFilters().put("name", Arrays.asList("miner"));
+		
+//		listContainersCmd.exec()
+//		listContainersCmd.getFilters().put("name", Arrays.asList("miner"));
 //		StatsCmd statsCmd = dockerClient.statsCmd("miner");
-		System.out.println(listContainersCmd.exec());
+		List<Container> containers = listContainersCmd.exec();
+		for (Container container : containers) {
+			System.out.println(container.getId());
+		}
+//		System.out.println();
 //		MinerProcess minerProcess = new MinerProcess();
 //		
 //		minerProcess.start();
@@ -72,5 +80,6 @@ public class DemoApplication {
 //		listAlg.stream().forEach((String alg) -> {
 //			System.out.println(alg);
 //		});
+		SpringApplication.run(DemoApplication.class, args);
 	}
 }
