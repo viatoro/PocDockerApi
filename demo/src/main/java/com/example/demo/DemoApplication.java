@@ -27,7 +27,7 @@ public class DemoApplication {
 //		properties.setProperty("DOCKER_CERT_PATH", "/Users/kwan/.docker/machine/machines/default");
 //		properties.setProperty("DOCKER_MACHINE_NAME", "default");
 //		properties.setProperty("DOCKER_TLS_VERIFY", "0");
-		properties.setProperty("DOCKER_HOST", "tcp://localhost:2376");
+		properties.setProperty("DOCKER_HOST", "unix:///var/run/docker.sock");
 		DefaultDockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder()
 		    .withProperties(properties).build();
 		DockerClient dockerClient = DockerClientBuilder.getInstance(config).build();
